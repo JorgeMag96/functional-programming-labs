@@ -12,8 +12,7 @@ public class OptionalLab {
 	@Test
 	void refactorToBeSafeTest() {
 		Book book = Book.getDummyBook();
-		String summary = book.getChapter(10).getSummary().toUpperCase();
-
+		String summary = book.getChapter(10).map(c -> c.getSummary()).orElse("");
 	}
 }
 
@@ -30,20 +29,19 @@ class Book {
 			this.summary = summary;
 		}
 
-		public String getSummary() {
-			return this.summary;
+		public  String getSummary() {
+			return Optional.of(this.summary).orElse("");
 		}
 	}
 
-	public Chapter getChapter(int id) {
-		Optional<Chapter> optional = Optional.empty(); 
+	public Optional<Chapter> getChapter(int id) {
+		Chapter resultChapter = null;
 		for (Chapter chapter : chapters) {
 			if (chapter.chapterid == id) {
-				optional = Optional.of(chapter);
-				break;
+				resultChapter = chapter;
 			}
 		}
-		return optional.orElse(new Chapter(id,"default chapter"));
+		return Optional.ofNullable(resultChapter);
 	}
 
 	public static Book getDummyBook() {
