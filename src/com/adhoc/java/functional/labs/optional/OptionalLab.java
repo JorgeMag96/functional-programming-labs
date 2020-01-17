@@ -1,6 +1,7 @@
 package com.adhoc.java.functional.labs.optional;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,12 +36,14 @@ class Book {
 	}
 
 	public Chapter getChapter(int id) {
+		Optional<Chapter> optional = Optional.empty(); 
 		for (Chapter chapter : chapters) {
 			if (chapter.chapterid == id) {
-				return chapter;
+				optional = Optional.of(chapter);
+				break;
 			}
 		}
-		return null;
+		return optional.orElse(new Chapter(id,"default chapter"));
 	}
 
 	public static Book getDummyBook() {
